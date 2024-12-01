@@ -3,14 +3,33 @@ import LeftContainer from "../leftcontainer/LeftContainer";
 import PlansPage from "../secondpage/PlansPage";
 // import PlansPage from "../secondpage/PlansPage";
 
-const PersonalInfo = () => {
+const PersonalInfo = ({
+  currentPage,
+  setCurrentPage,
+  storedData,
+  setStoredData,
+}) => {
   const [formData, setFormData] = useState({
     uName: "",
     uEmail: "",
     uPhoneNo: "",
   });
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    setCurrentPage("plansPage");
+    setStoredData((prev) => [
+      ...prev,
+      {
+        name: formData.uName,
+        email: formData.uEmail,
+        phone: formData.uPhoneNo,
+      },
+    ]);
+  }
+
   console.log(formData);
+  console.log(storedData);
   return (
     <div className="h-screen flex justify-center items-center max-sm:items-start max-lg:visible">
       <main className="bg-white w-8/12 h-5/6 rounded-lg flex  p-4 gap-16 shadow-lg max-sm:block max-sm:w-full max-sm:p-0 max-sm:bg-[rgb(0,255,255)] max-sm:shadow-none">
@@ -32,7 +51,12 @@ const PersonalInfo = () => {
                   name="name"
                   required
                   value={formData.uName}
-                  onChange={(e) => e.target.value}
+                  onChange={(e) =>
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      uName: e.target.value,
+                    }))
+                  }
                   className="w-full p-2 mt-2 outline-none border border-gray-300 focus:border-blue-600 rounded-md"
                 />
               </label>
@@ -41,12 +65,17 @@ const PersonalInfo = () => {
               <label htmlFor="email">
                 <p className="text-sm text-violet-900">Email Address</p>
                 <input
-                  type="mail"
+                  type="email"
                   id="email"
                   name="email"
                   required
                   value={formData.uEmail}
-                  onChange={(e) => e.target.value}
+                  onChange={(e) =>
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      uEmail: e.target.value,
+                    }))
+                  }
                   className="w-full p-2 mt-2 outline-none border border-gray-300 focus:border-blue-600 rounded-md"
                 />
               </label>
@@ -60,7 +89,12 @@ const PersonalInfo = () => {
                   name="phone"
                   required
                   value={formData.uPhoneNo}
-                  onChange={(e) => e.target.value}
+                  onChange={(e) =>
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      uPhoneNo: e.target.value,
+                    }))
+                  }
                   className="w-full p-2 mt-2 outline-none border border-gray-300 focus:border-blue-600 rounded-md"
                 />
               </label>
@@ -71,6 +105,7 @@ const PersonalInfo = () => {
               type="submit"
               className="bg-blue-900 text-white py-3 px-4 rounded-md text-xs"
               form="submit"
+              onClick={handleSubmit}
             >
               Next Step
             </button>
@@ -81,6 +116,7 @@ const PersonalInfo = () => {
             type="submit"
             form="submit"
             className="bg-blue-900 text-white py-3 px-4 rounded-md text-xs"
+            onClick={handleSubmit}
           >
             Next Step
           </button>

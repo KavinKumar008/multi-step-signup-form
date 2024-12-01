@@ -2,7 +2,23 @@ import React, { useContext, useState } from "react";
 import LeftContainer from "../leftcontainer/LeftContainer";
 import SuccessPage from "../fifthpage/SuccessPage";
 
-const FinishupPage = () => {
+const FinishupPage = ({ setCurrentPage, storedData, setStoredData }) => {
+  console.log(storedData);
+  function handleBackward() {
+    setCurrentPage("addons");
+  }
+
+  const planValue = Number(storedData[1].cash.match(/\d+/g));
+  console.log(planValue);
+
+  const addonValue = storedData[2].map((item) =>
+    item.extraCash.match(/\d+/g).map(Number)
+  );
+
+  const totalValue = addonValue.flat().reduce((sum, num) => sum + num, 0);
+  console.log(totalValue);
+
+  const finalResult = planValue + totalValue;
   return (
     <div className="h-screen flex justify-center items-center max-sm:h-0">
       <main className="bg-white w-8/12 h-5/6 rounded-lg flex  p-4 gap-16 shadow-lg max-sm:block max-sm:w-full max-sm:p-0 max-sm:bg-[rgb(0,255,255)] max-sm:shadow-none max-lg:w-auto">
@@ -20,7 +36,7 @@ const FinishupPage = () => {
             <div className="bg-blue-50 w-[400px] flex justify-between p-4 max-sm:w-[360px]">
               <div>
                 <p className="text-blue-950 font-xs font-semibold max-sm:text-lg">
-                  Arcade (Monthly)
+                  {storedData[1].plan} (Monthly)
                 </p>
                 <a
                   href="#"
@@ -31,7 +47,7 @@ const FinishupPage = () => {
               </div>
               <div>
                 <span className="text-sm text-blue-950 font-bold max-sm:text-lg">
-                  +$9/mo
+                  {storedData[1].cash}
                 </span>
               </div>
             </div>
@@ -48,12 +64,20 @@ const FinishupPage = () => {
               </div>
               {/* </div> */}
               <div className="flex justify-between bg-blue-50 px-4">
-                <p className="text-gray-400 text-xs max-sm:text-lg">
-                  Larger storage
-                </p>
-                <span className="text-blue-900 text-xs max-sm:text-lg">
-                  +$2/mo
-                </span>
+                <div>
+                  <p className="text-gray-400 text-xs max-sm:text-lg">
+                    {storedData[2].map((item) => (
+                      <p>{item.service}</p>
+                    ))}
+                  </p>
+                </div>
+                <div>
+                  <span className="text-blue-900 text-xs max-sm:text-lg">
+                    {storedData[2].map((item) => (
+                      <p>{item.extraCash}</p>
+                    ))}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -63,12 +87,15 @@ const FinishupPage = () => {
                 Total(per month)
               </p>
               <span className="text-lg text-blue-600 font-semibold max-sm:text-2xl">
-                $12/yr
+                {`$${finalResult}/yr`}
               </span>
             </div>
           </div>
           <div className="flex justify-between mt-16 w-[450px] max-sm:w-[360px] max-sm:p-3 max-sm:mt-36 max-sm:flex  max-sm:bg-white">
-            <button className="text-gray-400 text-sm font-bold max-sm:text-lg">
+            <button
+              className="text-gray-400 text-sm font-bold max-sm:text-lg"
+              onClick={handleBackward}
+            >
               Go Back
             </button>
             <button

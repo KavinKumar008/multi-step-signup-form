@@ -5,7 +5,32 @@ import { BiJoystick } from "react-icons/bi";
 import { BiSolidJoystickAlt } from "react-icons/bi";
 import AddonPage from "../thirdpage/AddonPage";
 
-const PlansPage = () => {
+const PlansPage = ({
+  curentPage,
+  setCurrentPage,
+  storedData,
+  setStoredData,
+}) => {
+  const [selectedData, setSelectedData] = useState({});
+
+  const [borderColor, setBorderColor] = useState(false);
+
+  function handleSubmit(subscribtion, amount) {
+    setBorderColor(subscribtion || amount);
+    setSelectedData({ plan: subscribtion, cash: amount });
+  }
+
+  function handleForward() {
+    setCurrentPage("addons");
+    setStoredData((prev) => [...prev, selectedData]);
+  }
+
+  function handleBackward() {
+    setCurrentPage("personalInfo");
+  }
+
+  console.log(storedData);
+  console.log(selectedData);
   return (
     <div className="h-screen flex justify-center items-center max-sm:h-0">
       <main className="bg-white w-8/12 h-5/6 rounded-lg flex  p-4 gap-16 shadow-lg max-sm:block max-sm:w-full max-sm:p-0 max-sm:bg-[rgb(0,255,255)] max-sm:shadow-none max-lg:gap-0 max-lg:w-auto">
@@ -21,9 +46,10 @@ const PlansPage = () => {
           </div>
           <div className="flex gap-4 mt-12 max-sm:block max-sm:gap-4">
             <div
-              className={
-                "flex flex-col gap-6 border border-gray-300 py-4 pl-3 pr-16 cursor-pointer rounded-md max-sm:flex-row max-sm:p-6"
-              }
+              className={`flex flex-col gap-6 border ${
+                borderColor === "Arcade" ? "border-blue-600" : "border-gray-300"
+              } py-4 pl-3 pr-16 cursor-pointer rounded-md max-sm:flex-row max-sm:p-6`}
+              onClick={() => handleSubmit("Arcade", "$9/mo")}
             >
               <div>
                 <LuJoystick className="bg-green-400 rounded-full text-2xl text-white p-1 max-sm:text-5xl" />
@@ -38,9 +64,12 @@ const PlansPage = () => {
               </div>
             </div>
             <div
-              className={
-                "flex flex-col gap-6 border border-gray-300 py-4 pl-3 pr-16 cursor-pointer rounded-md max-sm:flex-row max-sm:p-6"
-              }
+              className={`flex flex-col gap-6 border ${
+                borderColor === "Advanced"
+                  ? "border-blue-600"
+                  : "border-gray-300"
+              } py-4 pl-3 pr-16 cursor-pointer rounded-md max-sm:flex-row max-sm:p-6`}
+              onClick={() => handleSubmit("Advanced", "$12/mo")}
             >
               <div>
                 <BiJoystick className="bg-red-400 rounded-full text-2xl text-white p-1 max-sm:text-5xl" />
@@ -55,9 +84,10 @@ const PlansPage = () => {
               </div>
             </div>
             <div
-              className={
-                "flex flex-col gap-6 border border-gray-300 py-4 pl-3 pr-16 cursor-pointer rounded-md max-sm:flex-row max-sm:p-6"
-              }
+              className={`flex flex-col gap-6 border ${
+                borderColor === "Pro" ? "border-blue-600" : "border-gray-300"
+              } py-4 pl-3 pr-16 cursor-pointer rounded-md max-sm:flex-row max-sm:p-6`}
+              onClick={() => handleSubmit("Pro", "$15/mo")}
             >
               <div>
                 <BiSolidJoystickAlt className="bg-blue-800 rounded-full text-2xl text-white p-1 max-sm:text-5xl" />
@@ -85,12 +115,16 @@ const PlansPage = () => {
             </label>
           </div>
           <div className="flex justify-between mt-20 w-[400px] max-sm:bg-white max-sm:p-4  max-lg:w-auto">
-            <button className="text-gray-400 text-sm font-bold max-sm:text-lg">
+            <button
+              className="text-gray-400 text-sm font-bold max-sm:text-lg"
+              onClick={handleBackward}
+            >
               Go Back
             </button>
             <button
               type="button"
               className="bg-blue-900 text-white py-3 px-4 rounded-md text-xs max-sm:px-6 max-sm:text-lg max-sm:font-medium"
+              onClick={handleForward}
             >
               Next Step
             </button>
